@@ -17,33 +17,15 @@ This guide focuses on common production symptoms such as:
 
 ```mermaid
 flowchart TD
-    A[CCD Alarm Triggered] --> B[Check Ceph Health]
-    B --> C[Check OSD Tree]
-    C --> D{Is OSD Down?}
-
-    D -->|No| E[Check Deployment and Pod Status]
-    D -->|Yes| F[Check OSD Pod]
-
-    F --> G{Pod Status}
-    G -->|Running| H[Check Ceph Health Detail]
-    G -->|CrashLoopBackOff| I[Check Failing Container]
-    G -->|Pending| J[Check Scheduling and Node Status]
-
-    I --> K{Failing Container}
-    K -->|activate| L[Check Activate Logs]
-    K -->|expand-bluefs| M[Check BlueFS Logs]
-    K -->|osd| N[Check OSD Logs]
-
-    L --> O{Disk Found?}
-    O -->|Yes| P[Check BlueStore Metadata]
-    O -->|No| Q[Check Linux Disk Visibility]
-
-    Q --> R[Check lsblk and blkid]
-    R --> S[Check PCIe NVMe Devices]
-    S --> T{Device Missing?}
-
-    T -->|Yes| U[Escalate to Hardware or SDI Team]
-    T -->|No| V[Investigate Rook/Ceph Metadata]
+    A[Alert Received] --> B[Identify the Affected OSD]
+    B --> C[Check Cluster Health]
+    C --> D[Check OSD Pod Status]
+    D --> E[Collect Logs]
+    E --> F[Verify Disk Visibility]
+    F --> G[Verify Ceph Metadata]
+    G --> H[Check Hardware]
+    H --> I[Determine Root Cause]
+    I --> J[Recover or Escalate]
 ```
 
 ---
